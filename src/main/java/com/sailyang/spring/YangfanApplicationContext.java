@@ -2,6 +2,7 @@ package com.sailyang.spring;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,9 +38,9 @@ public class YangfanApplicationContext {
 
                     if(fileName.endsWith(".class")) {
                         //看看类上有没有Component的注解，才能判断是不是Bean
-                        String classStr = "classes";
+                        String classStr = "classes\\";
                         //com/sailyang/service
-                        String classPath = fileName.substring(fileName.indexOf(classStr + classStr.length()));
+                        String classPath = fileName.substring(fileName.indexOf(classStr) + classStr.length(),fileName.indexOf(".class"));
                         //com.sailyang.service
                         classPath = classPath.replace("\\", ".");
                         try {
@@ -99,7 +100,20 @@ public class YangfanApplicationContext {
     }
 
     public Object createBean(String beanName,BeanDefinition beanDefinition) {
-        return null;
+        Class clazz = beanDefinition.getType();
+        try {
+            Object instance = clazz.getConstructor().newInstance();
+            return instance;
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }
