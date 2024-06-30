@@ -1,9 +1,11 @@
 package com.sailyang.spring;
 
+import java.beans.Introspector;
 import java.io.File;
-import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -17,15 +19,22 @@ public class YangfanApplicationContext {
     private Class configClass;
 
     private ConcurrentHashMap<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+
     private ConcurrentHashMap<String,Object> singletonObjects = new ConcurrentHashMap<>();
+
+    private ArrayList<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
+
+
     public YangfanApplicationContext(Class configClass){
         this.configClass = configClass;
         //扫描
         if (configClass.isAnnotationPresent(ComponentScan.class)) {
 
             ComponentScan componentScanAnnotation = (ComponentScan) configClass.getAnnotation(ComponentScan.class);
-            String path = componentScanAnnotation.value();//获取扫描路径 com.sailyang.service
-            path = path.replace(".","/"); //转化成文件夹路径com/sailyang/service
+            //获取扫描路径 com.sailyang.service
+            String path = componentScanAnnotation.value();
+            //转化成文件夹路径com/sailyang/service
+            path = path.replace(".","/");
             //去输出对应的文件夹里面取类，而不是src下面
             ClassLoader classLoader = YangfanApplicationContext.class.getClassLoader();
             URL resource = classLoader.getResource(path);
@@ -34,7 +43,6 @@ public class YangfanApplicationContext {
                 File[] files = file.listFiles();
                 for(File f : files) {
                     String fileName = f.getAbsolutePath();
-                    System.out.println(fileName);
 
                     if(fileName.endsWith(".class")) {
                         //看看类上有没有Component的注解，才能判断是不是Bean
@@ -48,8 +56,24 @@ public class YangfanApplicationContext {
                             Class<?> clazz = classLoader.loadClass(classPath);
                             if (clazz.isAnnotationPresent(Component.class)) {
 
+                                //生成后置处理器的Bean
+                                if(BeanPostProcessor.class.isAssignableFrom(clazz)){
+                                    BeanPostProcessor instance = null;
+                                    try {
+                                        instance = (BeanPostProcessor) clazz.newInstance();
+                                        beanPostProcessorList.add(instance);
+                                    } catch (InstantiationException | IllegalAccessException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+
                                 Component component = clazz.getAnnotation(Component.class);
                                 String beanName = component.value();
+
+                                //防止为空，这里用类名生成小写的Bean名称 OrderService -> orderService
+                                if("".equals(beanName)){
+                                    beanName = Introspector.decapitalize(clazz.getSimpleName());
+                                }
 
                                 // 这里不直接生成Bean，多例是被调用才生成
                                 BeanDefinition beanDefinition = new BeanDefinition();
@@ -103,14 +127,34 @@ public class YangfanApplicationContext {
         Class clazz = beanDefinition.getType();
         try {
             Object instance = clazz.getConstructor().newInstance();
+            //依赖注入
+            for (Field f : clazz.getDeclaredFields()) {
+                if(f.isAnnotationPresent(Autowired.class)){
+                    f.setAccessible(true);
+                    f.set(instance, getBean(f.getName()));
+                }
+            }
+
+            //Aware: 实现回调，对象强转为接口类型
+            if(instance instanceof BeanNameAware) {
+                ((BeanNameAware)instance).setBeanName(beanName);
+            }
+
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                beanPostProcessor.postProcessBeforeInitialization(beanName, instance);
+            }
+
+            //初始化
+            if(instance instanceof InitializingBean) {
+                ((InitializingBean)instance).afterPropertiesSet();
+            }
+
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                beanPostProcessor.postProcessAfterInitialization(beanName, instance);
+            }
+
             return instance;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
 

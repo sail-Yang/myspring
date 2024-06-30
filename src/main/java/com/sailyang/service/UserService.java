@@ -1,7 +1,6 @@
 package com.sailyang.service;
 
-import com.sailyang.spring.Component;
-import com.sailyang.spring.Scope;
+import com.sailyang.spring.*;
 
 /**
  * @author yangfan
@@ -9,7 +8,28 @@ import com.sailyang.spring.Scope;
  * @description: TODO
  * @date 2024/6/28 10:18
  */
-@Component("userService")
-@Scope("prototype")
-public class UserService {
+@Component
+//@Scope("prototype")
+public class UserService implements BeanNameAware, InitializingBean {
+
+    @Autowired
+    private OrderService orderService;
+
+    private String beanName;
+
+    private String userName;
+
+    public void test() {
+        System.out.println(orderService);
+    }
+
+    @Override
+    public void setBeanName(String beanName) {
+        this.beanName = beanName;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        System.out.println("afterPropertiesSet()");
+    }
 }
