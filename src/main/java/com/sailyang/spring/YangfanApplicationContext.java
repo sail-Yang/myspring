@@ -140,8 +140,9 @@ public class YangfanApplicationContext {
                 ((BeanNameAware)instance).setBeanName(beanName);
             }
 
+            //后置处理器：初始化前
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
-                beanPostProcessor.postProcessBeforeInitialization(beanName, instance);
+                instance = beanPostProcessor.postProcessBeforeInitialization(beanName, instance);
             }
 
             //初始化
@@ -149,8 +150,9 @@ public class YangfanApplicationContext {
                 ((InitializingBean)instance).afterPropertiesSet();
             }
 
+            //后置处理器：初始化后
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
-                beanPostProcessor.postProcessAfterInitialization(beanName, instance);
+                instance = beanPostProcessor.postProcessAfterInitialization(beanName, instance);
             }
 
             return instance;

@@ -10,7 +10,7 @@ import com.sailyang.spring.*;
  */
 @Component
 //@Scope("prototype")
-public class UserService implements BeanNameAware, InitializingBean {
+public class UserService implements BeanNameAware, InitializingBean, UserInterface {
 
     @Autowired
     private OrderService orderService;
@@ -19,6 +19,7 @@ public class UserService implements BeanNameAware, InitializingBean {
 
     private String userName;
 
+    @Override
     public void test() {
         System.out.println(orderService);
     }
