@@ -3,3 +3,8 @@ spring:
     name: spring-bean
 server:
   port: 8080
+# ????????????
+logging:
+  level:
+    com:
+      sailyang: DEBUG

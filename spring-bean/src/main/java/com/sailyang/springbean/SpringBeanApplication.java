@@ -19,18 +19,8 @@ public class SpringBeanApplication {
     public static void main(String[] args){
         ConfigurableApplicationContext context = SpringApplication.run(SpringBeanApplication.class, args);
         try{
-            // 获取国际化资源
-            System.out.println(context.getMessage("hi", null, Locale.ENGLISH));
-
-            // 获取资源
-            Resource[] resources = context.getResources("classpath:application.yaml");
-            for(Resource r : resources) {
-                System.out.println(r);
-            }
-
-            // 获取环境变量
-            System.out.println(context.getEnvironment().getProperty("java_home"));
-            System.out.println(context.getEnvironment().getProperty("server.port"));
+            //发送事件
+            context.publishEvent(new UserRegisteredEvent(context));
         } catch ( Exception e) {
             System.out.println(e);
         }
