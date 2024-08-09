@@ -19,19 +19,18 @@ public class SpringBeanApplication {
     public static void main(String[] args){
         ConfigurableApplicationContext context = SpringApplication.run(SpringBeanApplication.class, args);
         try{
-            Field singletonObjects = DefaultSingletonBeanRegistry.class.getDeclaredField("singletonObjects");
-            singletonObjects.setAccessible(true);
-            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
-            Map<String,Object> stringObjectMap = (Map<String,Object>)singletonObjects.get(beanFactory);
-            // 获取所有单例Bean
-            stringObjectMap.forEach((k,v)->{
-                System.out.println(k+" : "+v);
-            });
-            // 过滤单例Bean
-            stringObjectMap.entrySet().stream().filter(e->e.getKey().startsWith("component"))
-                    .forEach(e->{
-                System.out.println(e.getKey()+" : "+e.getValue());
-            });
+            // 获取国际化资源
+            System.out.println(context.getMessage("hi", null, Locale.ENGLISH));
+
+            // 获取资源
+            Resource[] resources = context.getResources("classpath:application.yaml");
+            for(Resource r : resources) {
+                System.out.println(r);
+            }
+
+            // 获取环境变量
+            System.out.println(context.getEnvironment().getProperty("java_home"));
+            System.out.println(context.getEnvironment().getProperty("server.port"));
         } catch ( Exception e) {
             System.out.println(e);
         }
