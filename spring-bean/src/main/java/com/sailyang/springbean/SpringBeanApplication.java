@@ -19,13 +19,11 @@ public class SpringBeanApplication {
     public static void main(String[] args){
         ConfigurableApplicationContext context = SpringApplication.run(SpringBeanApplication.class, args);
         try{
-            //发送事件
-            context.publishEvent(new UserRegisteredEvent(context));
+            RegisterComponent registerComponent = context.getBean(RegisterComponent.class);
+            registerComponent.register();
         } catch ( Exception e) {
             System.out.println(e);
         }
-
-
     }
 
 }
