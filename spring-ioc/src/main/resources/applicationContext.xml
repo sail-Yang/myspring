@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd"> <!-- bean definitions here -->
+
+    <!--将指定类都配置给Spring，让Spring创建其对象的实例，一个bean对应一个对象-->
+    <bean id="additive" class="com.sailyang.di.xml.Additive"></bean>
+
+    <bean id="orangeJuiceConstructorDI" class="com.sailyang.di.xml.OrangeJuiceConstructorDI">
+        <!--通过构造函数注入，ref属性表示注入另一个对象-->
+        <constructor-arg ref="additive"></constructor-arg>
+    </bean>
+
+    <bean id="orangeJuiceSetterDI" class="com.sailyang.di.xml.OrangeJuiceSetterDI">
+        <!--通过setter注入，ref属性表示注入另一个对象-->
+        <property name="additive" ref="additive"></property>
+    </bean>
+
+    <context:component-scan base-package="com.sailyang.di.annotation"></context:component-scan>
+    <context:component-scan base-package="com.sailyang.di.annotation.dao"></context:component-scan>
+    <context:component-scan base-package="com.sailyang.di.annotation.service"></context:component-scan>
+</beans>

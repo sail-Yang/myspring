@@ -10,6 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-ioc</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
