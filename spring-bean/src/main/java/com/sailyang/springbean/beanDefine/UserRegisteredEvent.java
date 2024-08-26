@@ -1,4 +1,4 @@
-package com.sailyang.springbean;
+package com.sailyang.springbean.beanDefine;
 
 import org.springframework.context.ApplicationEvent;
 

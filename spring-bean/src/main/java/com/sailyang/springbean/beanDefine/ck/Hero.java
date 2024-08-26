@@ -1,4 +1,4 @@
-package com.sailyang.springbean.ck;
+package com.sailyang.springbean.beanDefine.ck;
 
 /**
  * @author yangfan

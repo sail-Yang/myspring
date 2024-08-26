@@ -1,4 +1,4 @@
-package com.sailyang.springbean;
+package com.sailyang.springbean.beanDefine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

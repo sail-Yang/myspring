@@ -1,7 +1,7 @@
 package com.sailyang.springbean;
 
-import com.sailyang.springbean.ck.HanXin;
-import com.sailyang.springbean.ck.LiBai;
+import com.sailyang.springbean.beanDefine.ck.HanXin;
+import com.sailyang.springbean.beanDefine.ck.LiBai;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.ChildBeanDefinition;

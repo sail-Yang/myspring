@@ -1,17 +1,8 @@
-package com.sailyang.springbean;
+package com.sailyang.springbean.beanDefine;
 
-import org.springframework.aop.scope.DefaultScopedObject;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.io.Resource;
-
-import java.lang.reflect.Field;
-import java.util.Locale;
-import java.util.Map;
 
 @SpringBootApplication
 public class SpringBeanApplication {

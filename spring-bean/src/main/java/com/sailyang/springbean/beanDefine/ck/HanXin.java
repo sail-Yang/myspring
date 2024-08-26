@@ -1,4 +1,4 @@
-package com.sailyang.springbean.ck;
+package com.sailyang.springbean.beanDefine.ck;
 
 /**
  * @author yangfan
@@ -6,7 +6,7 @@ package com.sailyang.springbean.ck;
  * @description: TODO
  * @date 2024/8/12 9:23
  */
-public class LiBai implements Hero {
+public class HanXin implements Hero {
     private String type;
     private String name;
     public String getType() {
