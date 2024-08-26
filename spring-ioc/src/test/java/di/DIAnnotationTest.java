@@ -1,3 +1,5 @@
+package di;
+
 import com.sailyang.di.annotation.service.PersonService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

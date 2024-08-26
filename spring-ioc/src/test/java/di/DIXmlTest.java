@@ -1,3 +1,5 @@
+package di;
+
 import com.sailyang.di.xml.OrangeJuiceConstructorDI;
 import com.sailyang.di.xml.OrangeJuiceSetterDI;
 import org.springframework.context.ApplicationContext;

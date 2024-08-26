@@ -17,6 +17,7 @@
         <property name="additive" ref="additive"></property>
     </bean>
 
+    <!--    基于注解-->
     <context:component-scan base-package="com.sailyang.di.annotation"></context:component-scan>
     <context:component-scan base-package="com.sailyang.di.annotation.dao"></context:component-scan>
     <context:component-scan base-package="com.sailyang.di.annotation.service"></context:component-scan>

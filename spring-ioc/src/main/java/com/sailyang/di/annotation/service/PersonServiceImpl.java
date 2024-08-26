@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("personService")
 public class PersonServiceImpl implements PersonService{
-//    @Resource(name="personDao")
+    @Resource(name="personDao")
     private PersonDao personDao;
 
     public PersonDao getPersonDao() {
